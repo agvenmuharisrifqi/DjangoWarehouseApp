@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+{% block navigation %}
+{% include 'navigation.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Awal Main -->
+<section id="main_section" class="main-section">
+    <div class="dashboard-wrapper">
+        <div class="d-flex justify-content-between">
+            <h1 class="title-form" id="dashboard_date">None</h1>
+            <h2 class="title-form" id="dashboard_clock">None</h2>
+        </div>
+        <div class="bg-white p-3 shadow rounded mb-5">
+            <h3 class="title-dashboard">Item Sold Chart</h3>
+            <canvas width="300" height="150" id="itemSoldChart">Your browser does not support the canvas
+                element.</canvas>
+        </div>
+        <div class="bg-white p-3 shadow rounded">
+            <h3 class="title-dashboard">List Low Stock</h3>
+            <table id="list_low_stock" class="table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="display-only">Product Name</th>
+                        <th>Product Number</th>
+                        <th class="display-only">Quantity</th>
+                        <th>Selling Price</th>
+                        <th>Buying Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td class="display-only">{{ product.name }}</td>
+                        <td>{{ product.number }}</td>
+                        <td class="display-only">{{ product.stock }}</td>
+                        <td>{{ product.selling }}</td>
+                        <td>{{ product.purchase }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<script src="{% static 'js/jquery-3.5.1.js'%}"></script>
+<script src="{% static 'js/nav.js'%}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

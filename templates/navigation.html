@@ -1,0 +1,77 @@
+{% load static %}
+<!-- Awal Header -->
+<nav class="navbar navbar-light bg-white sticky-top ">
+    <div style="padding: 0 20px;" class="d-flex justify-content-between align-items-center w-100">
+        <div class="d-flex align-items-center">
+            <div class="toggle-nav active" id="toggle_nav">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <a class="navbar-brand" href="{% url 'index' %}">Killua Developer</a>
+        </div>
+        <span class="navbar-text">
+            Halo, {{ user.get_full_name }}
+        </span>
+    </div>
+</nav>
+<!-- Akhir Header -->
+<!-- Awal Navbar -->
+<div id="menu_wrapper" class="menu-wrapper">
+    <ul class="menu-list">
+        <li class="menu-item {{ menu_active.dashboard }}">
+            <a href="{% url 'index' %}" class="menu-link">
+                <i class="icon fa-solid fa-chart-simple"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="menu-item {{ menu_active.invoice }}">
+            <a href="{% url 'productapp:all-doc' %}?doc_type=inv" class="menu-link">
+                <i class="fa-solid fa-receipt"></i>
+                <span>Invoice</span>
+            </a>
+        </li>
+        <li class="menu-item {{ menu_active.purchase_order }}">
+            <a href="{% url 'productapp:all-doc' %}?doc_type=po" class="menu-link">
+                <i class="fa-solid fa-file-lines"></i>
+                <span>Purchase Order</span>
+            </a>
+        </li>
+        <li class="menu-item {{ menu_active.products }}">
+            <a href="{% url 'productapp:all-product' %}" class="menu-link">
+                <i class="fa-solid fa-cubes"></i>
+                <span>Product</span>
+            </a>
+        </li>
+        <li class="menu-item {{ menu_active.suplier }}">
+            <a href="{% url 'productapp:all-suplier' %}" class="menu-link">
+                <i class="fa-solid fa-building"></i>
+                <span>Suplier</span>
+            </a>
+        </li>
+        {% if user.is_superuser %}
+        <li class="menu-item {{ menu_active.users }}">
+            <a href="{% url 'userapp:accessibility' %}" class="menu-link">
+                <i class="fa-solid fa-users-gear"></i>
+                <span>Users</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+    <div class="login-menu">
+        {% if biouser.image_profile %}
+        <img class="image-user" src="{{ biouser.get_image_profile_url }}" alt="Your Profile">
+        {% else %}
+        <img class="image-user" src="{% static 'img/blank_profile.png' %}" alt="Your Profile">
+        {% endif %}
+        <div class="desc-login">
+            <span style="margin-bottom: 10px;">Loged in as :</span>
+            <a href="{% url 'userapp:user-profile' %}" class="link-profile">{{ user.get_full_name }}</a>
+            <span class="text-secondary text-position">
+                {{ biouser.get_position }}
+            </span>
+            <a class="link-logout d-block" href="{% url 'userapp:logout' %}">Logout</a>
+        </div>
+    </div>
+</div>
+<!-- Akhir Navbar -->

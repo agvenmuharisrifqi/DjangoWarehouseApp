@@ -1,0 +1,405 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/datepicker.min.css' %}">
+<style>
+    /* Heading Profile */
+    .profile-header {
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+    }
+
+    .icon-wrapper {
+        background: black;
+        padding: 2px 0;
+        width: 26px;
+        text-align: center;
+        border-radius: 100%;
+        margin-right: .5rem;
+    }
+
+    .icon-wrapper i {
+        color: white;
+    }
+
+    /* Data Profile */
+    .data-wrapper {
+        display: flex;
+    }
+
+    .input-profile-wrapper {
+        margin-bottom: 1rem;
+        display: flex;
+    }
+
+    .input-profile {
+        border: none;
+        outline: none;
+        border-bottom: 1px solid transparent;
+        background-color: transparent !important;
+        font-size: 14px;
+        width: 100%;
+        height: 24px;
+        overflow: hidden;
+    }
+
+    .input-profile.input-long {
+        height: auto;
+        resize: none;
+    }
+
+    .input-profile:focus {
+        border-bottom: 1px solid #EAB308;
+    }
+
+    .label-input-profile {
+        width: 100px;
+        font-size: 14px;
+        font-weight: 300;
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+    /* For Image Input */
+    .image-wrapper {
+        width: 200px;
+        height: 250px;
+        padding: 5px;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+    }
+
+    .display-image {
+        width: 100%;
+        height: 100%;
+        background-color: #ffd24b;
+    }
+
+    .btn-upload-image {
+        padding: .2rem;
+        width: 100%;
+        background-color: #ffc107;
+        text-align: center;
+        border-radius: .25rem;
+        cursor: pointer;
+    }
+
+    .input-image {
+        display: none;
+    }
+
+    .profile-wrapper {
+        margin-right: 3rem;
+    }
+
+    .btn {
+        font-size: .9rem;
+    }
+
+    @media (max-width: 760px) {
+        .data-wrapper {
+            flex-wrap: wrap;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block navigation %}
+{% include 'navigation.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Awal Main -->
+<section id="main_section" class="main-section">
+    <div class="content-wrapper" style="position: relative;">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert-wrapper {{ message.tags }}" role="alert">
+            <i class="button-close fa-solid fa-xmark"></i>
+            <div class="alert-text">
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="profile-header">
+            <div class="icon-wrapper">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            User Profile
+        </div>
+        <div class="data-wrapper">
+            <div class="profile-wrapper mb-3">
+                <div class="image-wrapper">
+                    {% if biouser.image_profile %}
+                    <img class="display-image" src="{{ biouser.get_image_profile_url }}" alt="Your Profile">
+                    {% else %}
+                    <img class="display-image" src="{% static 'img/blank_profile.png' %}" alt="Your Profile">
+                    {% endif %}
+                </div>
+                <form id="form_photo_profile" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="input-image-wrapper mt-3">
+                        <label class="btn-upload-image w-100" for="{{ biodata_form.image_profile.auto_id }}">
+                            {{ biodata_form.image_profile.label }}
+                        </label>
+                        {{ biodata_form.image_profile }}
+                        <span class="notice-input text-center mt-2">
+                            <span>format .JPG .JPEG .PNG</span>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div class="w-100">
+                <div class="wrapper" style="transition: all .5s;">
+                    <h6 style="margin-bottom: 1rem;">Biodata</h6>
+                    <form method="POST" id="form_biodata">
+                        {% csrf_token %}
+                        <div class="input-profile-wrapper">
+                            <label class="label-input-profile">
+                                {{ biodata_form.id_number.label }}
+                            </label>
+                            <input type="text" class="input-profile" value="{{ id_user }}" disabled>
+                        </div>
+                        <div class="input-profile-wrapper">
+                            <label class="label-input-profile">Name</label>
+                            <input type="text" class="input-profile" value="{{ user.get_full_name }}" disabled>
+                        </div>
+                        <div class="input-profile-wrapper">
+                            <label class="label-input-profile" for="{{ biodata_form.email.auto_id }}">
+                                {{ biodata_form.email.label }}
+                            </label>
+                            {{ biodata_form.email }}
+                        </div>
+                        <div class="input-profile-wrapper">
+                            <label class="label-input-profile" for="{{ biodata_form.birth_place.auto_id }}">
+                                {{ biodata_form.birth_place.label }}
+                            </label>
+                            {{ biodata_form.birth_place }}
+                        </div>
+                        <div class="input-profile-wrapper">
+                            <label class="label-input-profile" for="{{ biodata_form.birth_date.auto_id }}">
+                                {{ biodata_form.birth_date.label }}
+                            </label>
+                            {{ biodata_form.birth_date }}
+                        </div>
+                        <div class="input-profile-wrapper">
+                            <label class="label-input-profile" for="{{ biodata_form.religion.auto_id }}">
+                                {{ biodata_form.religion.label }}
+                            </label>
+                            {{ biodata_form.religion }}
+                        </div>
+                        <div class="input-profile-wrapper">
+                            <label class="label-input-profile" for="{{ biodata_form.position.auto_id }}">
+                                {{ biodata_form.position.label }}
+                            </label>
+                            {{ biodata_form.position }}
+                        </div>
+                        <div class="input-profile-wrapper">
+                            <label class="label-input-profile" for="{{ biodata_form.address.auto_id }}">
+                                {{ biodata_form.address.label }}
+                            </label>
+                            {{ biodata_form.address }}
+                        </div>
+                    </form>
+                    <div class="text-end">
+                        <button class="btn-change btn btn-warning">
+                            <i class="fa-solid fa-lock"></i>
+                            CHANGE PASSWORD
+                        </button>
+                    </div>
+                </div>
+                <div class="wrapper" style="display: none; transition: all .5s">
+                    <h6 style="margin-bottom: 2rem;">Change Password</h6>
+                    <form method="POST" id="form_change_password">
+                        {% csrf_token %}
+                        <div class="input-wrapper">
+                            <div class="input-field">
+                                <input type="password" class="input-normal" name="current_password"
+                                    id="user_old_password" required>
+                                <label for="user_old_password" class="active">Current Password</label>
+                                <span class="error"></span>
+                            </div>
+                        </div>
+                        <div class="input-wrapper">
+                            <div class="input-field">
+                                <input type="password" class="input-normal" name="new_password" id="id_password"
+                                    required>
+                                <label for="id_password" class="active">New Password</label>
+                                <span class="error"></span>
+                            </div>
+                        </div>
+                        <div class="input-wrapper">
+                            <div class="input-field">
+                                <input type="password" class="input-normal" name="new_retype_password"
+                                    id="id_retype_password" required>
+                                <label for="id_retype_password" class="active">Retype New Password</label>
+                                <span class="error"></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="d-flex justify-content-between flex-wrap">
+                        <button class="btn-change btn btn-warning">
+                            <i class="fa-solid fa-address-card"></i>
+                            BIODATA
+                        </button>
+                        <button id="change_password" class="btn btn-warning">
+                            <i class="fa-solid fa-address-card"></i>
+                            SAVE NEW PASSWORD
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Akhir Main -->
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/jquery-3.5.1.js' %}"></script>
+<script src="{% static 'js/nav.js' %}"></script>
+<script src="{% static 'js/datepicker.min.js' %}"></script>
+<script>
+    // Image Profile
+    $("#id_image_profile").change(function () {
+        $input = $(this);
+        var file = this.files[0]
+        var token = $(this).parents("form").children()[0]
+        var form = new FormData()
+        if ($input.val().length > 0) {
+            var fileReader = new FileReader();
+            fileReader.onload = function (data) {
+                $('.display-image').attr('src', data.target.result);
+            }
+            fileReader.readAsDataURL($input.prop('files')[0]);
+        }
+        if (form) {
+            form.append(token.name, token.value);
+            form.append("image_profile", file);
+            $.ajax({
+                url: "{% url 'userapp:user-update' %}",
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function () {},
+                error: function () {}
+            })
+        }
+    })
+    // Update Biodata User
+    $(".input-profile").each(function () {
+        $(this).focusout(function () {
+            if (this.value) {
+                var token = $(this).parents("form").children()[0]
+                var form = new FormData()
+                var key = this.name
+                var value = this.value
+                form.append(token.name, token.value)
+                form.append(key, value)
+                $.ajax({
+                    url: "{% url 'userapp:user-update' %}",
+                    type: "POST",
+                    data: form,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        console.log(response)
+                    }
+                })
+            } else {
+                console.log("Tidak Ada Isi")
+            }
+        })
+    })
+    // Text Area 
+    $("#id_address").on("input", function () {
+        $(this).css("height", "auto");
+        $(this).css("height", this.scrollHeight);
+    })
+
+    // Change Form
+    let currentActive = 0;
+    let changeWrapper = $(".wrapper");
+    $(".btn-change").each(function () {
+        $(this).click(function () {
+            var currentNow = currentActive;
+            if (currentNow === changeWrapper.length - 1) currentActive--;
+            else currentActive++;
+            $(changeWrapper[currentNow]).hide()
+            $(changeWrapper[currentActive]).show()
+        })
+    })
+</script>
+<script aria-label="input-js">
+    // Datepicker
+
+    const inputDatepicker = document.querySelector("input.datepicker-here")
+    inputDatepicker.addEventListener("focus", () => {
+        let max = inputDatepicker.getAttribute('max')
+        let min = inputDatepicker.getAttribute('min')
+        const datepicker = new Datepicker(inputDatepicker, {
+            format: 'dd MM yyyy',
+            autohide: true,
+            maxDate: max,
+            minDate: min,
+        })
+    })
+
+    // Change Password
+    const btnChange = document.getElementById("change_password");
+    btnChange.addEventListener("click", (e) => {
+        console.log("Di SIni")
+        e.preventDefault();
+        let input = checkInput(),
+            retype_password = checkPassSame();
+        if (!input.includes(false) && retype_password) {
+            document.getElementById("form_change_password").submit();
+        }
+    })
+
+    function checkInput() {
+        let status = [],
+            regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+            regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/gm,
+            inputs = document.querySelectorAll("#form_change_password input[required]"),
+            warnings = document.querySelectorAll("#form_change_password input[required]~.error"),
+            len = Math.min(inputs.length, warnings.length);
+        for (let inp = 0; inp < len; inp++) {
+            let inpValue = inputs[inp].value
+            if (inpValue === "")
+                writeWarning(warnings[inp], "block", "don't be empty")
+            else if (inputs[inp].type === "email" && !inpValue.match(regEmail))
+                writeWarning(warnings[inp], "block", "please enter a valid email address")
+            else if (inputs[inp].id === "id_password" && !inpValue.match(regPassword))
+                writeWarning(warnings[inp], "block", "password is not strong")
+            else
+                writeWarning(warnings[inp], "none", "")
+        }
+
+        function writeWarning(warningElem, warningDisplay, warningText) {
+            let statusRes = warningDisplay === "block" ? false : true;
+            warningElem.textContent = warningText;
+            warningElem.style.display = warningDisplay;
+            status.push(statusRes)
+        }
+        return status
+    }
+
+    function checkPassSame() {
+        let pass = document.getElementById("id_password"),
+            rety = document.getElementById("id_retype_password"),
+            warRety = rety.nextElementSibling.nextElementSibling;
+        if (pass.value === "" || rety.value === "") return false
+        if (pass.value !== rety.value) {
+            warRety.textContent = "retype password is not same"
+            warRety.style.display = "block";
+            return false
+        }
+        return true
+    }
+</script>
+{% endblock %}
