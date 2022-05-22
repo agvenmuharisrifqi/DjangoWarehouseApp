@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Warehouse App</title>
+
+    <!-- All CSS -->
+    <script src="https://kit.fontawesome.com/69f952805c.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Acme&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_all.css' %}">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}" />
+
+    <!-- Custom CSS -->
+    {% block css %}
+
+    {% endblock %}
+</head>
+
+<body>
+    {% block navigation %}
+
+    {% endblock %}
+
+    {% block content %}
+
+    {% endblock %}
+
+    <!-- All JavaScript -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <!-- Custom JavaScript -->
+    {% block javascript %}
+    {% endblock %}
+
+    {% if not login_or_signup %}
+    <script>
+        window.onload = menuResponsive()
+    </script>
+    {% endif %}
+    <script>
+        const btnClose = document.querySelector(".button-close")
+        if (btnClose !== null) {
+            btnClose.addEventListener("click", (e) => {
+                var parent = e.target.parentElement;
+                parent.style.display = 'none'
+            })
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+{% block navigation %}
+{% endblock %}
+
+{% block content %}
+<main class="login">
+    <div class="login-wrapper">
+        {% if is_user %}
+        <div class="image-login">
+            <img src="{% static 'img/image_login.jpg' %}" alt="Image Login" width="300">
+        </div>
+        <div class="input-login">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert-wrapper {{ message.tags }}" role="alert">
+                <i class="button-close fa-solid fa-xmark"></i>
+                <div class="alert-text">
+                    {{ message }}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <h1 class="title-form">Change Your Password</h1>
+            <form method="POST" id="form_login">
+                {% csrf_token %}
+                <div class="input-wrapper">
+                    <i class="icon-input fa-solid fa-lock"></i>
+                    <div class="input-field">
+                        {{ pass_form.password }}
+                        <label for="{{ pass_form.password.auto_id }}">
+                            {{ pass_form.password.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error"></span>
+                        <span class="notice-input">
+                            <ul>
+                                <li>must use at least one capital letter</li>
+                                <li>must use at least one special character</li>
+                                <li>must be longer than 8</li>
+                            </ul>
+                        </span>
+                    </div>
+                    <i class="password-eye fa-solid fa-eye-slash"></i>
+                </div>
+                <div class="input-wrapper">
+                    <i class="icon-input fa-solid fa-unlock"></i>
+                    <div class="input-field">
+                        {{ pass_form.retype_password }}
+                        <label for="{{ pass_form.retype_password.auto_id }}">
+                            {{ pass_form.retype_password.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error"></span>
+                        <span class="notice-input">
+                            must be the same as the password
+                        </span>
+                    </div>
+                    <i class="password-eye fa-solid fa-eye-slash"></i>
+                </div>
+                <button id="submit_login" class="btn-submit btn btn-warning w-100" type="submit">SUBMIT</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="input-login">
+            <h1 class="title-form">Broken Link</h1>
+            <p style="color: #5e5e5e;">
+                The link you entered is wrong or the link has expired.
+            </p>
+            <a href="{% url 'userapp:reset-password' %}" class="btn-submit btn btn-warning w-100">Back To Reset Page</a>
+        </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/input.js' %}"></script>
+<script>
+    const btnLogin = document.getElementById("submit_login")
+    btnLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        let input = checkInput();
+        let rety = checkPassSame()
+        if (!input.includes(false) && rety) {
+            document.getElementById("form_login").submit();
+        }
+    })
+</script>
+<script aria-label="input-js">
+    const inputField = document.querySelectorAll("input:not(input[type='hidden'])");
+    const labelInput = document.querySelectorAll("input:not(input[type='hidden'])~label");
+    for (let inp = 0; inp < inputField.length; inp++) {
+        inputField[inp].addEventListener("focus", () => {
+            if (!labelInput[inp].classList.contains("active")) {
+                labelInput[inp].classList.add("active")
+            }
+        })
+        if (inputField[inp].value !== "" || inputField[inp].type === "date") {
+            labelInput[inp].classList.add("active")
+        }
+        inputField[inp].addEventListener("blur", (e) => {
+            if (e.target.value === "" && e.target.type !== "date") {
+                labelInput[inp].classList.remove("active")
+            }
+        })
+    }
+    const passwordEye = document.querySelectorAll(".input-wrapper i.password-eye");
+    const passwordInput = document.querySelectorAll(".input-field input[type='password']")
+    if (passwordEye !== null && passwordInput !== null) {
+        for (let pass = 0; pass < passwordEye.length; pass++) {
+            passwordEye[pass].addEventListener("click", (e) => {
+                if (e.target.classList.contains("fa-eye-slash") && passwordInput[pass].type === "password") {
+                    e.target.classList.remove("fa-eye-slash")
+                    e.target.classList.add("fa-eye");
+                    passwordInput[pass].type = "text";
+                } else {
+                    e.target.classList.remove("fa-eye");
+                    e.target.classList.add("fa-eye-slash")
+                    passwordInput[pass].type = "password";
+                }
+            })
+        }
+    }
+
+    function checkInput() {
+        let status = [],
+            regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+            regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/gm,
+            inputs = document.querySelectorAll("input[required], select[required]"),
+            warnings = document.querySelectorAll("input[required]~.error, select[required]~.error"),
+            len = Math.min(inputs.length, warnings.length);
+        console.log(inputs);
+        console.log(warnings);
+        for (let inp = 0; inp < len; inp++) {
+            let inpValue = inputs[inp].value
+            if (inpValue === "")
+                writeWarning(warnings[inp], "block", "don't be empty")
+            else if (inputs[inp].type === "email" && !inpValue.match(regEmail))
+                writeWarning(warnings[inp], "block", "please enter a valid email address")
+            else if (inputs[inp].id === "id_password" && !inpValue.match(regPassword))
+                writeWarning(warnings[inp], "block", "password is not strong")
+            else
+                writeWarning(warnings[inp], "none", "")
+        }
+
+        function writeWarning(warningElem, warningDisplay, warningText) {
+            let statusRes = warningDisplay === "block" ? false : true;
+            warningElem.textContent = warningText;
+            warningElem.style.display = warningDisplay;
+            status.push(statusRes)
+        }
+        return status
+    }
+
+    function checkPassSame() {
+        let pass = document.getElementById("id_password"),
+            rety = document.getElementById("id_retype_password"),
+            warRety = rety.nextElementSibling.nextElementSibling;
+        if (pass.value === "" || rety.value === "") return false
+        if (pass.value !== rety.value) {
+            warRety.textContent = "retype password is not same"
+            warRety.style.display = "block";
+            return false
+        }
+        return true
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+{% block navigation %}
+{% endblock %}
+
+{% block content %}
+<main class="login">
+    <div class="login-wrapper">
+        {% if email_sending %}
+        <div class="input-login">
+            <h1 class="title-form">Password will be changed</h1>
+            <p style="color: #5e5e5e;">
+                We have sent a guide to changing your password to your email. Please check your email and follow the
+                instructions you received.
+            </p>
+            <a href="{% url 'index' %}" class="btn-submit btn btn-warning w-100">Back To Home Page</a>
+        </div>
+        {% else %}
+        <div class="image-login">
+            <img src="{% static 'img/image_login.jpg' %}" alt="Image Login" width="300">
+        </div>
+        <div class="input-login">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert-wrapper {{ message.tags }}" role="alert">
+                <i class="button-close fa-solid fa-xmark"></i>
+                <div class="alert-text">
+                    {{ message }}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <h1 class="title-form">Forgot Your Password ?</h1>
+            <p style="color: #5e5e5e;">
+                Enter your email address below and we will send you an instruction to change your password.
+            </p>
+            <form method="POST" id="form_login">
+                {% csrf_token %}
+                <div class="input-wrapper">
+                    <i class="icon-input fa-solid fa-envelope"></i>
+                    <div class="input-field">
+                        {{ pass_form.email }}
+                        <label for="{{ pass_form.email.auto_id }}">
+                            {{ pass_form.email.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error"></span>
+                    </div>
+                </div>
+                <button id="submit_login" class="btn-submit btn btn-warning w-100" type="submit">SEND</button>
+            </form>
+            <div class="link-login d-flex justify-content-between">
+                <a class="text-warning" href="{% url 'userapp:login' %}">Alredy have an account ?</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/input.js' %}"></script>
+<script>
+    const btnLogin = document.getElementById("submit_login")
+    btnLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        let input = checkLoginInput();
+        if (!input.includes(false)) {
+            document.getElementById("form_login").submit();
+        }
+    })
+
+    function checkLoginInput() {
+        let status = [];
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        let inputs = document.querySelectorAll("input:not([type='hidden'])");
+        let warnings = document.querySelectorAll(".error");
+        let len = Math.min(inputs.length, warnings.length)
+        for (let inp = 0; inp < len; inp++) {
+            let inpValue = inputs[inp].value
+            if (inpValue === "") {
+                warnings[inp].style.display = "block";
+                warnings[inp].textContent = "don't be empty";
+                status.push(false);
+            } else if (inputs[inp].type === "email" && !inpValue.match(reg)) {
+                warnings[inp].style.display = "block";
+                warnings[inp].textContent = "please enter a valid email address";
+                status.push(false);
+            } else {
+                warnings[inp].textContent = "";
+                warnings[inp].style.display = "none";
+                status.push(true);
+            }
+        }
+        return status
+    }
+</script>
+{% endblock %}

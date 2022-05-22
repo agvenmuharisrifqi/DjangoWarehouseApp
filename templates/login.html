@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+{% block navigation %}
+{% endblock %}
+
+{% block content %}
+<main class="login">
+    <div class="login-wrapper">
+        <div class="image-login">
+            <img src="{% static 'img/image_login.jpg' %}" alt="Image Login" width="300">
+        </div>
+        <div class="input-login">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert-wrapper {{ message.tags }}" role="alert">
+                <i class="button-close fa-solid fa-xmark"></i>
+                <div class="alert-text">
+                    {{ message }}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <h1 class="title-form">Login To Your Account</h1>
+            <form method="POST" id="form_login">
+                {% csrf_token %}
+                <div class="input-wrapper">
+                    <i class="icon-input fa-solid fa-envelope"></i>
+                    <div class="input-field">
+                        {{ login_form.email }}
+                        <label for="{{ login_form.email.auto_id }}">{{ login_form.email.label }}</label>
+                        <span class="error"></span>
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <i class="icon-input fa-solid fa-lock"></i>
+                    <div class="input-field">
+                        {{ login_form.password }}
+                        <label for="{{ login_form.password.auto_id }}">{{ login_form.password.label }}</label>
+                        <span class="error"></span>
+                    </div>
+                    <i class="password-eye fa-solid fa-eye-slash"></i>
+                </div>
+                <button id="submit_login" class="btn-submit btn btn-warning w-100" type="submit">LOGIN</button>
+            </form>
+            <div class="link-login d-flex justify-content-between">
+                <a class="text-warning" href="{% url 'userapp:reset-password' %}">Forgot Password?</a>
+                <a class="text-warning" href="{% url 'userapp:signup' %}">Create Account?</a>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/input.js' %}"></script>
+<script>
+    const btnLogin = document.getElementById("submit_login")
+    btnLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        let input = checkLoginInput();
+        if (!input.includes(false)) {
+            document.getElementById("form_login").submit();
+        }
+    })
+
+    function checkLoginInput() {
+        let status = [];
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        let inputs = document.querySelectorAll("input:not([type='hidden'])");
+        let warnings = document.querySelectorAll(".error");
+        let len = Math.min(inputs.length, warnings.length)
+        for (let inp = 0; inp < len; inp++) {
+            let inpValue = inputs[inp].value
+            if (inpValue === "") {
+                warnings[inp].style.display = "block";
+                warnings[inp].textContent = "don't be empty";
+                status.push(false);
+            } else if (inputs[inp].type === "email" && !inpValue.match(reg)) {
+                warnings[inp].style.display = "block";
+                warnings[inp].textContent = "please enter a valid email address";
+                status.push(false);
+            } else {
+                warnings[inp].textContent = "";
+                warnings[inp].style.display = "none";
+                status.push(true);
+            }
+        }
+        return status
+    }
+</script>
+{% endblock %}
