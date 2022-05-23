@@ -118,10 +118,10 @@ class ProductForm(forms.Form):
         (idx['name'], idx['name']) for idx in Suplier.objects.values('name')
     )
     CHOICE_COMPANY = (('', 'Choose product company'),) + CHOICE  
-    company = forms.CharField(
+    company = forms.ChoiceField(
         label='Company Product',
+        choices=CHOICE_COMPANY,
         widget=forms.Select(
-            choices=CHOICE_COMPANY,
             attrs={
                 'class': 'input-normal',
                 'required': True,
