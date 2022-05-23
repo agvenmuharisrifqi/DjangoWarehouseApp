@@ -123,6 +123,10 @@ def signup_view(request):
         signup_form = SignupForm(request.POST or None)
         if signup_form.is_valid():
             signup_form.create()
+            fullname = request.POST.get('first_name') + ' ' + request.POST.get('last_name')
+            email = request.POST.get('email')
+            content = f'Terdapat User baru dengan\nNama:{fullname}\nEmail:{email}'
+            send_text_email('Ada User Baru', content, ['devkillua33@gmail.com'])
             return redirect('userapp:login')
         else:
             messages.error(request, 'the data failed to create please check again, make sure there are no errors')

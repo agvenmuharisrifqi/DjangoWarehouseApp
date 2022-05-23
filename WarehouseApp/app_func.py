@@ -44,4 +44,4 @@ def send_html_email(subject, content, email_to, template):
 def send_text_email(subject, content, email_to):
     from_email = settings.EMAIL_HOST_USER
     email_to = [email_to] if type(email_to) == str else email_to
-    send_mail(subject, content, from_email,email_to)
+    send_mail(subject, content, from_email, email_to)
