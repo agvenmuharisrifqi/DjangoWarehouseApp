@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+from multiprocessing.sharedctypes import Value
+>>>>>>> 319da7cfb894e39058db0c1afa1dc5dcd5699b25
 from django import forms
 from django.contrib.auth.models import User
 from UserApp.models import *

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+from unicodedata import name
+>>>>>>> 319da7cfb894e39058db0c1afa1dc5dcd5699b25
 from django import forms
 from ProductApp.models import *
 from ckeditor.widgets import CKEditorWidget
@@ -118,10 +122,17 @@ class ProductForm(forms.Form):
         (idx['name'], idx['name']) for idx in Suplier.objects.values('name')
     )
     CHOICE_COMPANY = (('', 'Choose product company'),) + CHOICE  
+<<<<<<< HEAD
     company = forms.ChoiceField(
         label='Company Product',
         choices=CHOICE_COMPANY,
         widget=forms.Select(
+=======
+    company = forms.CharField(
+        label='Company Product',
+        widget=forms.Select(
+            choices=CHOICE_COMPANY,
+>>>>>>> 319da7cfb894e39058db0c1afa1dc5dcd5699b25
             attrs={
                 'class': 'input-normal',
                 'required': True,

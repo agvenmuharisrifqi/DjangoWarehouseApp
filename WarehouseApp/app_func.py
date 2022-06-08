@@ -11,7 +11,10 @@ Parameter = length(int)[required]
             string(str)
 Default = string : abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 """
-characters_default = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+characters_default = list(
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+
+
 def uniqueString(length, characters=characters_default):
     unique = ""
     for i in range(length):
@@ -25,6 +28,7 @@ def checkAdmin(user):
         return True
     else:
         return False
+
 
 def send_html_email(subject, content, email_to, template):
     from_email = settings.EMAIL_HOST_USER
@@ -40,6 +44,7 @@ def send_html_email(subject, content, email_to, template):
     email = EmailMultiAlternatives(subject, text_content, from_email, email_to)
     email.attach_alternative(html_content, 'text/html')
     email.send()
+
 
 def send_text_email(subject, content, email_to):
     from_email = settings.EMAIL_HOST_USER

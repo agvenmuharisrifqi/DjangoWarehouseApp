@@ -9,7 +9,10 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+<<<<<<< HEAD
 
+=======
+>>>>>>> 319da7cfb894e39058db0c1afa1dc5dcd5699b25
 from pathlib import Path
 from django.contrib.messages import constants as messages
 import os
@@ -31,7 +34,10 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1').split(',')
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 319da7cfb894e39058db0c1afa1dc5dcd5699b25
 # Application definition
 
 INSTALLED_APPS = [
@@ -83,11 +89,19 @@ WSGI_APPLICATION = 'WarehouseApp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
+<<<<<<< HEAD
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 if os.environ.get('DATABASE_URL'):
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+=======
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+if os.environ.get('DATABASES'):
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+>>>>>>> 319da7cfb894e39058db0c1afa1dc5dcd5699b25
 
 
 # Password validation
@@ -130,6 +144,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+<<<<<<< HEAD
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Media
@@ -138,6 +153,16 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Login URL
 LOGIN_REDIRECT_URL = 'index'
+=======
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+# Login URL
+
+LOGIN_REDIRECT_URL = 'index'
+
+>>>>>>> 319da7cfb894e39058db0c1afa1dc5dcd5699b25
 LOGIN_URL = 'userapp:login'
 
 # Default primary key field type
@@ -153,21 +178,32 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
+<<<<<<< HEAD
 # Session
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 300 * 60
 SESSION_SAVE_EVERY_REQUEST = True
 
+=======
+>>>>>>> 319da7cfb894e39058db0c1afa1dc5dcd5699b25
 # Email
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+<<<<<<< HEAD
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'aplikasisaya44@gmail.com')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'vggsuqpgovragypq')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
 
+=======
+EMAIL_HOST_USER = 'my email'
+EMAIL_HOST_PASSWORD = 'my password'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+>>>>>>> 319da7cfb894e39058db0c1afa1dc5dcd5699b25
 # CKEDITOR
 CKEDITOR_CONFIGS = {
     'defaults': {
@@ -199,6 +235,16 @@ CKEDITOR_CONFIGS = {
             ]},
         ],
         'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
+<<<<<<< HEAD
+=======
+        # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
+        # 'height': 291,
+        # 'width': '100%',
+        # 'filebrowserWindowHeight': 725,
+        # 'filebrowserWindowWidth': 940,
+        # 'toolbarCanCollapse': True,
+        # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
+>>>>>>> 319da7cfb894e39058db0c1afa1dc5dcd5699b25
         'tabSpaces': 4,
         'extraPlugins': ','.join([
             'uploadimage', # the upload image feature

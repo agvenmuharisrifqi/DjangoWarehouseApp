@@ -4,6 +4,8 @@ from ckeditor.fields import RichTextField
 from WarehouseApp.app_func import *
 
 # Create your models here.
+
+
 class Suplier(models.Model):
     custom_id = models.CharField(max_length=25, unique=True)
     name = models.CharField(max_length=255, unique=True)
@@ -20,6 +22,7 @@ class Suplier(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Product(models.Model):
     custom_id = models.CharField(max_length=25, unique=True)
@@ -46,6 +49,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+
 class PurchaseOrder(models.Model):
     custom_id = models.CharField(max_length=25, unique=True)
     status = models.BooleanField(null=True, blank=True)
@@ -69,6 +73,7 @@ class PurchaseOrder(models.Model):
 
     def __str__(self):
         return self.number
+
 
 class Order(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
