@@ -6,6 +6,7 @@ from UserApp.models import *
 
 @login_required(redirect_field_name='')
 def index(request):
+    print(request.session.get_expire_at_browser_close())
     biouser = BioUser.objects.get(user=request.user)
     products = Product.objects.filter(stock__lte = 50)
     nav_active = {

@@ -153,6 +153,11 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
+# Session
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 300 * 60
+SESSION_SAVE_EVERY_REQUEST = True
+
 # Email
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
